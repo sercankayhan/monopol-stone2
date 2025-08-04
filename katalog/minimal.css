@@ -1,0 +1,232 @@
+/* NET VE GÜZEL TASARIM */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    background: #f8f9fa;
+    line-height: 1.6;
+}
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 30mm auto;
+    background: white;
+    padding: 25mm;
+    position: relative;
+    page-break-after: always;
+}
+
+.page:last-child {
+    page-break-after: avoid;
+}
+
+/* COVER PAGE */
+.cover-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo {
+    max-height: 200px;
+    margin-bottom: 30px;
+}
+
+.main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: #555;
+    margin: 20px 0;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.cover-info {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+}
+
+.contact-item {
+    color: #666;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* PAGE TITLES */
+.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #D4AF37;
+    padding-bottom: 15px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #D4AF37;
+    margin: 30px 0 20px 0;
+    text-align: center;
+}
+
+/* FOTOĞRAFLAR - NET VE GÜZEL */
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    box-shadow: none;
+    filter: none;
+    background: none;
+    opacity: 1;
+}
+
+/* PRODUCT GRIDS */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.color-item, .preview-item, .featured-brick {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+}
+
+.color-item img {
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.preview-item img {
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.featured-brick img {
+    height: 320px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.color-item h4, .preview-item span, .featured-brick h4 {
+    color: #333;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* MINI VARIANTS */
+.brick-variants {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.color-item.mini {
+    padding: 15px;
+    background: #f8f9fa;
+}
+
+.color-item.mini img {
+    height: 110px;
+    margin-bottom: 10px;
+}
+
+.color-item.mini h4 {
+    font-size: 14px;
+    color: #666;
+}
+
+/* TOC */
+.toc {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+}
+
+.toc h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+}
+
+.toc li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+    color: #666;
+    font-size: 16px;
+}
+
+.toc li:last-child {
+    border-bottom: none;
+}
+
+/* PRODUCT SPECS */
+.product-specs {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 25px;
+    border: 1px solid #e9ecef;
+}
+
+.product-specs h4 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #D4AF37;
+    padding-bottom: 8px;
+}
+
+.product-specs ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-specs li {
+    padding: 5px 0;
+    color: #666;
+}
+
+/* PRINT UYUMLU */
+@media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; }
+    img { page-break-inside: avoid; }
+}
