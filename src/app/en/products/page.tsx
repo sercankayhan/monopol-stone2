@@ -3,7 +3,7 @@
 import ProductImage from '@/components/ProductImage'
 import FloatingButtons from '@/components/FloatingButtons'
 import AnimatedProductCard from '@/components/AnimatedProductCard'
-import PDFCatalog from '@/components/PDFCatalog'
+// import PDFCatalog from '@/components/PDFCatalog'
 import Link from 'next/link'
 import Breadcrumb from '@/components/Breadcrumb'
 
@@ -121,10 +121,7 @@ export default function ProductsPage() {
       {/* PDF Catalog Section */}
       <section className="pdf-catalog" id="catalog">
         <div className="container">
-          <PDFCatalog 
-            cultureStones={cultureStones}
-            cultureBricks={cultureBricks}
-          />
+          {/* PDFCatalog bileşeni geçici olarak devre dışı */}
         </div>
       </section>
       

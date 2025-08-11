@@ -485,13 +485,11 @@ export default function IletisimPage() {
                 }}>
                   Konum
                 </h3>
-                <div className="map-container" style={{ height: '300px', width: '100%' }}>
+                <div className="map-container" style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
                   {mapLoaded ? (
                     <iframe
-                      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&q=41.1435,28.4614"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, borderRadius: '0 0 10px 10px' }}
+                      src="https://www.google.com/maps?q=41.1435,28.4614&hl=tr&z=12&output=embed"
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0, borderRadius: '0 0 10px 10px' }}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
@@ -499,7 +497,7 @@ export default function IletisimPage() {
                     />
                   ) : (
                     <div style={{
-                      height: '100%',
+                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                       background: '#f8f9fa',
                       display: 'flex',
                       alignItems: 'center',

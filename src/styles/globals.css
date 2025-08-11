@@ -77,6 +77,9 @@ html {
 img {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Scroll sırasında animasyonları durdur */
@@ -99,6 +102,8 @@ body {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
   will-change: scroll-position;
+  padding-left: max(0px, var(--safe-left));
+  padding-right: max(0px, var(--safe-right));
 }
 
 /* Global Scrollbar Styles */
@@ -130,6 +135,8 @@ a {
   margin: 0 auto;
   padding: 0 20px;
   background: transparent;
+  padding-left: calc(20px + var(--safe-left));
+  padding-right: calc(20px + var(--safe-right));
 }
 
 /* Header Styles */
@@ -141,6 +148,8 @@ a {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
+  position: sticky;
+  top: 0;
 }
 
 .header .nav-menu a, .header .header-top, .header .header-main, .header .container, .header span, .header li, .header ul {
@@ -182,7 +191,8 @@ a {
 
 /* Hero Section with Slider */
 .hero-slider {
-  height: 80vh;
+  /* 60-85vh arası, mobilde daha kısa, desktopta daha uzun */
+  height: clamp(50svh, 70vh, 85svh);
   margin-top: 0;
   position: relative;
   overflow: hidden;
@@ -466,6 +476,8 @@ a {
     gap: 8px;
     align-items: center;
     font-size: 0.95rem;
+    padding-top: calc(40px + var(--safe-top));
+    padding-bottom: calc(40px + var(--safe-bottom));
   }
   
   .product-grid {
@@ -707,7 +719,7 @@ section, main, .products, .features, .footer {
   }
   
   .header-main img {
-    height: 100px;
+    height: 120px !important;
   }
   
   .header-top {
@@ -3180,3 +3192,17 @@ a:hover .product-card-premium {
     font-size: 20px;
   }
 } 
+
+/* Prevent body scroll when mobile menu open */
+.no-scroll {
+  overflow: hidden !important;
+  height: 100vh;
+}
+
+/* Ensure nav covers full viewport on mobile open */
+@media (max-width: 768px) {
+  .nav-menu.mobile-open {
+    left: 0;
+    width: 100vw;
+  }
+}

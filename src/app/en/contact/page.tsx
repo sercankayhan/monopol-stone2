@@ -483,20 +483,18 @@ export default function ContactPage() {
                 }}>
                   Location
                 </h3>
-                <div style={{ height: '300px', width: '100%' }}>
+                <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
                   {mapLoaded ? (
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.1234567890123!2d28.4614!3d41.1435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA4JzM2LjYiTiAyOMKwMjcnNDEuMCJF!5e0!3m2!1str!2str!4v1234567890123"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, borderRadius: '0 0 10px 10px' }}
+                      src="https://www.google.com/maps?q=41.1435,28.4614&hl=en&z=12&output=embed"
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0, borderRadius: '0 0 10px 10px' }}
                       allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     />
                   ) : (
                     <div style={{
-                      height: '100%',
+                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                       background: '#f8f9fa',
                       display: 'flex',
                       alignItems: 'center',

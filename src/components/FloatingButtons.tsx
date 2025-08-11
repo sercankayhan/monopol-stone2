@@ -19,6 +19,7 @@ export default function FloatingButtons() {
     <>
       {/* WhatsApp Button - Sağ Alt */}
       <div 
+        className="floating-whatsapp"
         onClick={handleWhatsApp}
         style={{
           position: 'fixed',
@@ -50,6 +51,7 @@ export default function FloatingButtons() {
 
       {/* Call Button - Sol Alt */}
       <div 
+        className="floating-call"
         onClick={handleCall}
         style={{
           position: 'fixed',

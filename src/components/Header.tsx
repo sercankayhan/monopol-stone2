@@ -1,11 +1,49 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link'
 
 export default function Header() {
   const pathname = usePathname();
   const isEn = pathname.startsWith('/en');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLUListElement | null>(null);
+
+  // Body scroll lock + focus trap + ESC to close
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('no-scroll');
+
+      // Focus first link
+      const focusable = menuRef.current?.querySelectorAll<HTMLElement>('a, button');
+      focusable && focusable[0]?.focus();
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setIsMobileMenuOpen(false);
+          return;
+        }
+        if (e.key === 'Tab' && focusable && focusable.length > 0) {
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        document.body.classList.remove('no-scroll');
+      };
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+  }, [isMobileMenuOpen]);
 
   return (
     <header className="header" style={{
@@ -65,6 +103,9 @@ export default function Header() {
                   color: '#333',
                   display: 'none'
                 }}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="primary-navigation"
+                aria-label={isMobileMenuOpen ? (isEn ? 'Close menu' : 'Menüyü kapat') : (isEn ? 'Open menu' : 'Menüyü aç')}
               >
                 {isMobileMenuOpen ? '✕' : '☰'}
               </button>
@@ -72,7 +113,7 @@ export default function Header() {
             
             {/* Sol: Logo */}
             <div className="logo-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-20px', flex: '0 0 auto' }}>
-              <a href="/" style={{ textDecoration: 'none' }}>
+              <Link href="/" style={{ textDecoration: 'none' }}>
                 <img 
                   src="/logo.jpeg" 
                   alt="Monopol Stone Logo" 
@@ -83,28 +124,28 @@ export default function Header() {
                     display: 'block',
                   }}
                 />
-              </a>
+              </Link>
             </div>
             
             {/* Orta: Menü */}
             <nav style={{ flex: '1 1 auto', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1001 }}>
-              <ul className={`nav-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+              <ul ref={menuRef} id="primary-navigation" className={`nav-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
                 <li>
-                  <a href={isEn ? "/en" : "/"} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#444', borderRadius: '8px', padding: '6px 16px', fontWeight: 700, color: '#fff', WebkitTextFillColor: '#fff', transition: 'background-color 0.3s ease' }} onMouseEnter={(e) => { e.currentTarget.style.background = '#FD7E14'; const img = e.currentTarget.querySelector('img'); if (img) img.style.filter = 'brightness(0) invert(1)'; }} onMouseLeave={(e) => { e.currentTarget.style.background = '#444'; const img = e.currentTarget.querySelector('img'); if (img) img.style.filter = 'none'; }}>
+                  <Link href={isEn ? "/en" : "/"} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#444', borderRadius: '8px', padding: '6px 16px', fontWeight: 700, color: '#fff', WebkitTextFillColor: '#fff', transition: 'background-color 0.3s ease' }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#FD7E14'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'brightness(0) invert(1)'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#444'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'none'; }}>
                     <img src="/house.svg" alt="Home Icon" style={{ width: 22, height: 22, verticalAlign: 'middle', transition: 'filter 0.3s ease' }} />
                     {isEn ? "HOME" : "ANASAYFA"}
-                  </a>
+                  </Link>
                 </li>
                 <li style={{ position: 'relative' }}>
-                  <a
+                  <Link
                     href={isEn ? "/en/urunler" : "/urunler"}
                     style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
                     {isEn ? "PRODUCTS" : "ÜRÜNLER"}
                     <span style={{ fontSize: '12px', transition: 'transform 0.3s ease' }}>▼</span>
-                  </a>
+                  </Link>
                   <div className="dropdown-menu">
-                    <a href={isEn ? "/en/products" : "/urunler/kultur-taslari"} style={{
+                    <Link href={isEn ? "/en/products" : "/urunler/kultur-taslari"} style={{
                       display: 'block',
                       padding: '10px 20px',
                       color: '#333',
@@ -112,36 +153,46 @@ export default function Header() {
                       fontSize: '14px',
                       transition: 'background-color 0.2s',
                       borderBottom: '1px solid #f0f0f0',
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = '#f8f8f8'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                    }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
                       <span style={{ color: '#FFA726 !important', marginRight: '8px', WebkitTextFillColor: '#FFA726' }}>•</span>
                       {isEn ? 'Culture Stones' : 'Kültür Taşları'}
-                    </a>
-                    <a href={isEn ? "/en/products" : "/urunler/kultur-tuglalari"} style={{
+                    </Link>
+                    <Link href={isEn ? "/en/products" : "/urunler/kultur-tuglalari"} style={{
                       display: 'block',
                       padding: '10px 20px',
                       color: '#333',
                       textDecoration: 'none',
                       fontSize: '14px',
                       transition: 'background-color 0.2s',
-                    }} onMouseEnter={(e) => e.currentTarget.style.background = '#f8f8f8'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                    }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
                       <span style={{ color: '#FB8C00 !important', marginRight: '8px', WebkitTextFillColor: '#FB8C00' }}>•</span>
                       {isEn ? 'Culture Bricks' : 'Kültür Tuğlaları'}
-                    </a>
+                    </Link>
                   </div>
                 </li>
-                <li><a href={isEn ? "/en/gallery" : "/galeri"}>{isEn ? "GALLERY" : "GÖRSEL GALERİ"}</a></li>
-                <li><a href={isEn ? "/en/contact" : "/iletisim"}>{isEn ? "CONTACT US" : "BİZE ULAŞIN"}</a></li>
+                <li><Link href={isEn ? "/en/gallery" : "/galeri"}>{isEn ? "GALLERY" : "GÖRSEL GALERİ"}</Link></li>
+                <li><Link href={isEn ? "/en/contact" : "/iletisim"}>{isEn ? "CONTACT US" : "BİZE ULAŞIN"}</Link></li>
               </ul>
             </nav>
+
+            {/* Mobile overlay */}
+            {isMobileMenuOpen && (
+              <div
+                className="mobile-overlay"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-hidden="true"
+                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 1000 }}
+              />
+            )}
             
             {/* Sağ: Dil seçici */}
             <div className="language-buttons" style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '0 0 auto', marginRight: '8px' }}>
-              <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+              <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
                 <img src="/tr.svg" alt="Türkçe" style={{ width: 28, height: 28 }} />
-              </a>
-              <a href="/en" style={{ display: 'flex', alignItems: 'center' }}>
+              </Link>
+              <Link href="/en" style={{ display: 'flex', alignItems: 'center' }}>
                 <img src="/gb.svg" alt="English" style={{ width: 28, height: 28 }} />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
