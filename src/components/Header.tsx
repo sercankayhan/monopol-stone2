@@ -100,8 +100,7 @@ export default function Header() {
                   fontSize: '28px',
                   cursor: 'pointer',
                   padding: '8px',
-                  color: '#333',
-                  display: 'none'
+                  color: '#333'
                 }}
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="primary-navigation"
