@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useErrorHandling } from '@/hooks/useErrorHandling'
+import { usePerformanceMonitoring } from '@/hooks/usePerformanceMonitoring'
+import Loading from './Loading'
 
 interface Product {
   id: number
@@ -19,6 +22,18 @@ interface ProductSliderProps {
 export default function ProductSlider({ products, title }: ProductSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
+
+  const { handleError, executeWithErrorHandling } = useErrorHandling({
+    enableLogging: true,
+    onError: (error) => {
+      console.error('ProductSlider error:', error);
+      setHasError(true);
+    }
+  });
+
+  const { measureUserInteraction } = usePerformanceMonitoring('ProductSlider');
 
   useEffect(() => {
     if (!isAutoPlaying) return

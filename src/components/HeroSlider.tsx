@@ -3,11 +3,25 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Loading from './Loading'
+import { useErrorHandling } from '@/hooks/useErrorHandling'
+import { usePerformanceMonitoring } from '@/hooks/usePerformanceMonitoring'
 
 export default function HeroSlider() {
   const pathname = usePathname()
   const [isEn, setIsEn] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [loadedImages, setLoadedImages] = useState(0)
+
+  const { handleError } = useErrorHandling({
+    enableLogging: true,
+    onError: (error) => {
+      console.error('HeroSlider error:', error);
+    }
+  });
+
+  const { measureResourceLoad, measureUserInteraction } = usePerformanceMonitoring('HeroSlider');
 
   // Handle client-side hydration
   useEffect(() => {
@@ -22,6 +36,43 @@ export default function HeroSlider() {
     '/header/urun3-optimized.jpg'
   ]
 
+  // Preload images
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const imagePromises = slides.map((src, index) => {
+          return new Promise<void>((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+              measureResourceLoad(src, 'image');
+              setLoadedImages(prev => {
+                const newCount = prev + 1;
+                if (newCount === slides.length) {
+                  setImagesLoaded(true);
+                }
+                return newCount;
+              });
+              resolve();
+            };
+            img.onerror = () => {
+              handleError(new Error(`Failed to load hero image: ${src}`), { imageIndex: index });
+              reject();
+            };
+            img.src = src;
+          });
+        });
+
+        await Promise.allSettled(imagePromises);
+      } catch (error) {
+        handleError(error as Error, { component: 'HeroSlider', action: 'loadImages' });
+      }
+    };
+
+    if (isClient) {
+      loadImages();
+    }
+  }, [isClient, slides, measureResourceLoad, handleError]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -35,11 +86,70 @@ export default function HeroSlider() {
   }
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length)
+    const endMeasurement = measureUserInteraction('hero_next_click');
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    endMeasurement();
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+    const endMeasurement = measureUserInteraction('hero_prev_click');
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    endMeasurement();
+  }
+
+  const handleDotClick = (index: number) => {
+    const endMeasurement = measureUserInteraction('hero_dot_click');
+    setCurrentSlide(index);
+    endMeasurement();
+  }
+
+  // Show loading state
+  if (!isClient || !imagesLoaded) {
+    return (
+      <section className="hero-slider">
+        <div style={{
+          height: '500px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          position: 'relative',
+        }}>
+          <Loading 
+            size="large" 
+            type="pulse" 
+            text={`Resimler yükleniyor... (${loadedImages}/${slides.length})`}
+          />
+          
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '20px',
+            padding: '8px 16px',
+            backdropFilter: 'blur(10px)',
+          }}>
+            <div style={{
+              width: '200px',
+              height: '4px',
+              background: 'rgba(255, 255, 255, 0.3)',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                width: `${(loadedImages / slides.length) * 100}%`,
+                height: '100%',
+                background: '#FD7E14',
+                borderRadius: '2px',
+                transition: 'width 0.3s ease',
+              }} />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -86,7 +196,7 @@ export default function HeroSlider() {
           <span 
             key={index}
             className={`dot ${index === currentSlide ? 'active' : ''}`}
-            onClick={() => goToSlide(index)}
+            onClick={() => handleDotClick(index)}
           ></span>
         ))}
       </div>

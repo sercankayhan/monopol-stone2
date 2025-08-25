@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import ClientOnly from './ClientOnly';
+
 
 export default function Footer() {
   const pathname = usePathname();

@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import ProductImage from './ProductImage'
+import Loading, { ProductCardSkeleton } from './Loading'
+import { useErrorHandling } from '@/hooks/useErrorHandling'
+import { usePerformanceMonitoring } from '@/hooks/usePerformanceMonitoring'
 
 interface AnimatedProductCardProps {
   id: number
@@ -10,35 +14,90 @@ interface AnimatedProductCardProps {
   description: string
   images: string[]
   link: string
+  loading?: boolean
 }
 
-export default function AnimatedProductCard({ id, title, description, images, link }: AnimatedProductCardProps) {
+export default function AnimatedProductCard({ id, title, description, images, link, loading = false }: AnimatedProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [cardError, setCardError] = useState(false)
+
+  const { handleError, executeWithErrorHandling } = useErrorHandling({
+    enableLogging: true,
+    onError: (error) => {
+      console.error(`AnimatedProductCard error for product ${id}:`, error);
+      setCardError(true);
+    }
+  });
+
+  const { measureUserInteraction } = usePerformanceMonitoring('AnimatedProductCard');
+
+  // Handle image loading
+  const handleImageLoad = () => {
+    setImagesLoaded(true);
+  };
+
+  // Click tracking
+  const handleCardClick = () => {
+    const endMeasurement = measureUserInteraction('product_card_click');
+    // Delay the measurement end to track navigation time
+    setTimeout(endMeasurement, 100);
+  };
 
   // Her ürün için farklı başlangıç indeksi (rastgele görünüm için)
   useEffect(() => {
-    if (!images || images.length <= 1) return
+    executeWithErrorHandling(async () => {
+      if (!images || images.length <= 1) return;
 
-    // Ürün ID'sine göre farklı başlangıç indeksi
-    const startIndex = (id % images.length)
-    setCurrentImageIndex(startIndex)
+      // Ürün ID'sine göre farklı başlangıç indeksi
+      const startIndex = (id % images.length);
+      setCurrentImageIndex(startIndex);
 
-    const interval = setInterval(() => {
-      setIsTransitioning(true)
-      
-      // 400ms sonra resmi değiştir
-      setTimeout(() => {
-        setCurrentImageIndex(prev => (prev + 1) % images.length)
-        setIsTransitioning(false)
-      }, 400)
-    }, 4000)
+      const interval = setInterval(() => {
+        setIsTransitioning(true);
+        
+        // 400ms sonra resmi değiştir
+        setTimeout(() => {
+          setCurrentImageIndex(prev => (prev + 1) % images.length);
+          setIsTransitioning(false);
+        }, 400);
+      }, 4000);
 
-    return () => clearInterval(interval)
-  }, [images, id])
+      return () => clearInterval(interval);
+    }, 'AnimatedProductCard_useEffect');
+  }, [images, id, executeWithErrorHandling]);
+
+  // Show loading skeleton
+  if (loading || !imagesLoaded) {
+    return <ProductCardSkeleton />;
+  }
+
+  // Show error state
+  if (cardError) {
+    return (
+      <div style={{
+        background: '#fff',
+        borderRadius: '12px',
+        padding: '40px 20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        textAlign: 'center',
+        color: '#666',
+        border: '2px dashed #ddd',
+      }}>
+        <div style={{ fontSize: '2rem', marginBottom: '12px' }}>⚠️</div>
+        <div style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '8px' }}>
+          Ürün Yüklenemedi
+        </div>
+        <div style={{ fontSize: '0.9rem' }}>
+          {title || 'Bilinmeyen Ürün'}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Link href={link} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href={link} style={{ textDecoration: 'none', color: 'inherit' }} onClick={handleCardClick}>
       <div 
         style={{ 
           cursor: 'pointer', 

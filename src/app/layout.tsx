@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import '@/styles/globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ErrorBoundary from '@/components/ErrorBoundary'
+import PerformanceProvider from '@/components/PerformanceProvider'
+import ResourceHints, { CriticalCSS, CRITICAL_CSS } from '@/components/ResourceHints'
+import '@/utils/serviceWorker'
 
 export const metadata: Metadata = {
   title: 'Monopol Stone - Tuğla Kaplama, Dekoratif Kültür Taşı, Ahşap Duvar Panelleri, Doğal Taş Kaplama',
@@ -18,9 +22,30 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'tr_TR',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+    viewportFit: 'cover',
+  },
+  manifest: '/manifest.json',
+  themeColor: '#FD7E14',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Monopol Stone',
+  },
+  formatDetection: {
+    telephone: true,
+    date: false,
+    address: true,
+    email: true,
+  },
   other: {
-    'charset': 'utf-8',
-    'Content-Type': 'text/html; charset=utf-8',
+    'mobile-web-app-capable': 'yes',
+    'HandheldFriendly': 'True',
+    'MobileOptimized': '320',
   },
 }
 
@@ -37,9 +62,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <CriticalCSS css={CRITICAL_CSS} />
+        <ResourceHints />
+        <PerformanceProvider>
+          <ErrorBoundary>
+            <Header />
+            {children}
+            <Footer />
+          </ErrorBoundary>
+        </PerformanceProvider>
       </body>
     </html>
   )

@@ -49,8 +49,8 @@ function formatTitle(str: string) {
 
 export default function Breadcrumb() {
   const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
   const [isEn, setIsEn] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   // Handle client-side hydration
   useEffect(() => {
@@ -58,16 +58,11 @@ export default function Breadcrumb() {
     setIsEn(pathname.startsWith('/en'));
   }, [pathname]);
 
-  // Don't render on server side to prevent hydration mismatch
-  if (!isClient) {
-    return null;
-  }
-
   // Parçaları al, eğer İngilizce ise baştaki 'en'i atla
   const parts = pathname.split('/').filter(Boolean);
-  const realParts = isEn ? parts.slice(1) : parts;
-  let path = isEn ? '/en' : '';
-  const map = isEn ? breadcrumbMapEn : breadcrumbMapTr;
+  const realParts = isClient && isEn ? parts.slice(1) : parts;
+  let path = isClient && isEn ? '/en' : '';
+  const map = isClient && isEn ? breadcrumbMapEn : breadcrumbMapTr;
 
   // Ana sayfada breadcrumb gösterme
   if (pathname === '/' || pathname === '/en') {
