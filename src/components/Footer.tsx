@@ -1,9 +1,18 @@
 "use client";
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import ClientOnly from './ClientOnly';
 
 export default function Footer() {
   const pathname = usePathname();
-  const isEn = pathname.startsWith('/en');
+  const [isClient, setIsClient] = useState(false);
+  const [isEn, setIsEn] = useState(false);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+    setIsEn(pathname.startsWith('/en'));
+  }, [pathname]);
   return (
     <footer style={{
       background: '#000',
@@ -11,7 +20,7 @@ export default function Footer() {
       padding: '60px 0 40px',
       marginTop: '80px',
       fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif'
-    }}>
+    }} suppressHydrationWarning>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -71,10 +80,10 @@ export default function Footer() {
               marginBottom: '20px',
               fontWeight: 600,
             }}>
-              {isEn ? 'Products' : 'Ürünler'}
+              {isClient && isClient && isEn ? 'Products' : 'Ürünler'}
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a href={isEn ? "/en/products" : "/urunler"} style={{
+              <a href={isClient && isEn ? "/en/products" : "/urunler"} style={{
                 color: '#ccc',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -84,9 +93,9 @@ export default function Footer() {
                 gap: '8px',
               }}>
                 <span style={{ color: '#FFA726' }}>•</span>
-                {isEn ? 'Culture Stones' : 'Kültür Taşları'}
+                {isClient && isEn ? 'Culture Stones' : 'Kültür Taşları'}
               </a>
-              <a href={isEn ? "/en/products" : "/urunler"} style={{
+              <a href={isClient && isEn ? "/en/products" : "/urunler"} style={{
                 color: '#ccc',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -96,7 +105,7 @@ export default function Footer() {
                 gap: '8px',
               }}>
                 <span style={{ color: '#FB8C00' }}>•</span>
-                {isEn ? 'Culture Bricks' : 'Kültür Tuğlaları'}
+                {isClient && isEn ? 'Culture Bricks' : 'Kültür Tuğlaları'}
               </a>
             </div>
           </div>
@@ -109,10 +118,10 @@ export default function Footer() {
               marginBottom: '20px',
               fontWeight: 600,
             }}>
-              {isEn ? 'Gallery' : 'Görsel Galeri'}
+              {isClient && isEn ? 'Gallery' : 'Görsel Galeri'}
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a href={isEn ? "/en/gallery" : "/galeri/projeler"} style={{
+              <a href={isClient && isEn ? "/en/gallery" : "/galeri/projeler"} style={{
                 color: '#ccc',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -122,9 +131,9 @@ export default function Footer() {
                 gap: '8px',
               }}>
                 <span style={{ color: '#FFA726' }}>•</span>
-                {isEn ? 'Completed Projects' : 'Tamamlanan Projeler'}
+                {isClient && isEn ? 'Completed Projects' : 'Tamamlanan Projeler'}
               </a>
-              <a href={isEn ? "/en/gallery" : "/galeri/uygulamalar"} style={{
+              <a href={isClient && isEn ? "/en/gallery" : "/galeri/uygulamalar"} style={{
                 color: '#ccc',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -134,9 +143,9 @@ export default function Footer() {
                 gap: '8px',
               }}>
                 <span style={{ color: '#FB8C00' }}>•</span>
-                {isEn ? 'Applications' : 'Uygulama Örnekleri'}
+                {isClient && isEn ? 'Applications' : 'Uygulama Örnekleri'}
               </a>
-              <a href={isEn ? "/en/gallery" : "/galeri/showroom"} style={{
+              <a href={isClient && isEn ? "/en/gallery" : "/galeri/showroom"} style={{
                 color: '#ccc',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -146,7 +155,7 @@ export default function Footer() {
                 gap: '8px',
               }}>
                 <span style={{ color: '#E53935' }}>•</span>
-                {isEn ? 'Showroom' : 'Showroom'}
+                {isClient && isEn ? 'Showroom' : 'Showroom'}
               </a>
             </div>
           </div>
@@ -159,7 +168,7 @@ export default function Footer() {
               marginBottom: '20px',
               fontWeight: 600,
             }}>
-              {isEn ? 'Contact Us' : 'Bize Ulaşın'}
+              {isClient && isEn ? 'Contact Us' : 'Bize Ulaşın'}
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{

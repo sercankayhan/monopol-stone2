@@ -1,13 +1,21 @@
 "use client";
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link'
+import Link from 'next/link';
+import ClientOnly from './ClientOnly';
 
 export default function Header() {
   const pathname = usePathname();
-  const isEn = pathname.startsWith('/en');
+  const [isEn, setIsEn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const menuRef = useRef<HTMLUListElement | null>(null);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+    setIsEn(pathname.startsWith('/en'));
+  }, [pathname]);
 
   // Body scroll lock + focus trap + ESC to close
   useEffect(() => {
@@ -76,7 +84,7 @@ export default function Header() {
                 <img src="/email.svg" alt="Email" style={{ width: 16, height: 16 }} />
                 info@monopolstone.com
               </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }} suppressHydrationWarning>
                 <img src="/call.svg" alt="Phone" style={{ width: 16, height: 16 }} />
                 0 (532) 382 01 97
               </span>
@@ -91,28 +99,45 @@ export default function Header() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Sol: Mobile Menu Button (sadece mobilde görünür) */}
             <div className="mobile-menu-container">
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="mobile-menu-btn"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '28px',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  color: '#333'
-                }}
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="primary-navigation"
-                aria-label={isMobileMenuOpen ? (isEn ? 'Close menu' : 'Menüyü kapat') : (isEn ? 'Open menu' : 'Menüyü aç')}
-              >
-                {isMobileMenuOpen ? '✕' : '☰'}
-              </button>
+              <ClientOnly fallback={
+                <button 
+                  className="mobile-menu-btn"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '28px',
+                    cursor: 'pointer',
+                    padding: '8px',
+                    color: '#333'
+                  }}
+                  aria-label="Menüyü aç"
+                >
+                  ☰
+                </button>
+              }>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="mobile-menu-btn"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '28px',
+                    cursor: 'pointer',
+                    padding: '8px',
+                    color: '#333'
+                  }}
+                  aria-expanded={isMobileMenuOpen}
+                  aria-controls="primary-navigation"
+                  aria-label={isMobileMenuOpen ? (isClient && isEn ? 'Close menu' : 'Menüyü kapat') : (isClient && isEn ? 'Open menu' : 'Menüyü aç')}
+                >
+                  {isMobileMenuOpen ? '✕' : '☰'}
+                </button>
+              </ClientOnly>
             </div>
             
             {/* Sol: Logo */}
             <div className="logo-container" style={{ display: 'flex', alignItems: 'center', marginLeft: '-20px', flex: '0 0 auto' }}>
-              <Link href="/" style={{ textDecoration: 'none' }}>
+              <Link href={isClient && isEn ? "/en" : "/"} style={{ textDecoration: 'none' }}>
                 <img 
                   src="/logo.jpeg" 
                   alt="Monopol Stone Logo" 
@@ -128,59 +153,87 @@ export default function Header() {
             
             {/* Orta: Menü */}
             <nav style={{ flex: '1 1 auto', display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 1001 }}>
-              <ul ref={menuRef} id="primary-navigation" className={`nav-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-                <li>
-                  <Link href={isEn ? "/en" : "/"} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#444', borderRadius: '8px', padding: '6px 16px', fontWeight: 700, color: '#fff', WebkitTextFillColor: '#fff', transition: 'background-color 0.3s ease' }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#FD7E14'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'brightness(0) invert(1)'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#444'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'none'; }}>
-                    <img src="/house.svg" alt="Home Icon" style={{ width: 22, height: 22, verticalAlign: 'middle', transition: 'filter 0.3s ease' }} />
-                    {isEn ? "HOME" : "ANASAYFA"}
-                  </Link>
-                </li>
-                <li style={{ position: 'relative' }}>
-                  <Link
-                    href={isEn ? "/en/urunler" : "/urunler"}
-                    style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
-                  >
-                    {isEn ? "PRODUCTS" : "ÜRÜNLER"}
-                    <span style={{ fontSize: '12px', transition: 'transform 0.3s ease' }}>▼</span>
-                  </Link>
-                  <div className="dropdown-menu">
-                    <Link href={isEn ? "/en/products" : "/urunler/kultur-taslari"} style={{
-                      display: 'block',
-                      padding: '10px 20px',
-                      color: '#333',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      transition: 'background-color 0.2s',
-                      borderBottom: '1px solid #f0f0f0',
-                    }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
-                      <span style={{ color: '#FFA726 !important', marginRight: '8px', WebkitTextFillColor: '#FFA726' }}>•</span>
-                      {isEn ? 'Culture Stones' : 'Kültür Taşları'}
+              <ClientOnly fallback={
+                <ul className="nav-menu">
+                  <li>
+                    <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#444', borderRadius: '8px', padding: '6px 16px', fontWeight: 700, color: '#fff', WebkitTextFillColor: '#fff', transition: 'background-color 0.3s ease' }}>
+                      <img src="/house.svg" alt="Home Icon" style={{ width: 22, height: 22, verticalAlign: 'middle', transition: 'filter 0.3s ease' }} />
+                      ANASAYFA
                     </Link>
-                    <Link href={isEn ? "/en/products" : "/urunler/kultur-tuglalari"} style={{
-                      display: 'block',
-                      padding: '10px 20px',
-                      color: '#333',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                      transition: 'background-color 0.2s',
-                    }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
-                      <span style={{ color: '#FB8C00 !important', marginRight: '8px', WebkitTextFillColor: '#FB8C00' }}>•</span>
-                      {isEn ? 'Culture Bricks' : 'Kültür Tuğlaları'}
+                  </li>
+                  <li style={{ position: 'relative' }}>
+                    <Link href="/urunler" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      ÜRÜNLER
+                      <span style={{ fontSize: '12px', transition: 'transform 0.3s ease' }}>▼</span>
                     </Link>
-                  </div>
-                </li>
-                <li><Link href={isEn ? "/en/gallery" : "/galeri"}>{isEn ? "GALLERY" : "GÖRSEL GALERİ"}</Link></li>
-                <li><Link href={isEn ? "/en/contact" : "/iletisim"}>{isEn ? "CONTACT US" : "BİZE ULAŞIN"}</Link></li>
-              </ul>
+                    <div className="dropdown-menu">
+                      <Link href="/urunler/kultur-taslari" style={{ display: 'block', padding: '10px 20px', color: '#333', textDecoration: 'none', fontSize: '14px', transition: 'background-color 0.2s', borderBottom: '1px solid #f0f0f0' }}>
+                        <span style={{ color: '#FFA726 !important', marginRight: '8px', WebkitTextFillColor: '#FFA726' }}>•</span>
+                        Kültür Taşları
+                      </Link>
+                      <Link href="/urunler/kultur-tuglalari" style={{ display: 'block', padding: '10px 20px', color: '#333', textDecoration: 'none', fontSize: '14px', transition: 'background-color 0.2s' }}>
+                        <span style={{ color: '#FB8C00 !important', marginRight: '8px', WebkitTextFillColor: '#FB8C00' }}>•</span>
+                        Kültür Tuğlaları
+                      </Link>
+                    </div>
+                  </li>
+                  <li><Link href="/galeri">GÖRSEL GALERİ</Link></li>
+                  <li><Link href="/iletisim">BİZE ULAŞIN</Link></li>
+                </ul>
+              }>
+                <ul ref={menuRef} id="primary-navigation" className={`nav-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+                  <li>
+                    <Link href={isClient && isEn ? "/en" : "/"} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#444', borderRadius: '8px', padding: '6px 16px', fontWeight: 700, color: '#fff', WebkitTextFillColor: '#fff', transition: 'background-color 0.3s ease' }} onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#FD7E14'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'brightness(0) invert(1)'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#444'; const img = e.currentTarget.querySelector('img'); if (img) (img as HTMLImageElement).style.filter = 'none'; }}>
+                      <img src="/house.svg" alt="Home Icon" style={{ width: 22, height: 22, verticalAlign: 'middle', transition: 'filter 0.3s ease' }} />
+                      {isClient && isEn ? "HOME" : "ANASAYFA"}
+                    </Link>
+                  </li>
+                  <li style={{ position: 'relative' }}>
+                    <Link
+                      href={isClient && isEn ? "/en/products" : "/urunler"}
+                      style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      {isClient && isEn ? "PRODUCTS" : "ÜRÜNLER"}
+                      <span style={{ fontSize: '12px', transition: 'transform 0.3s ease' }}>▼</span>
+                    </Link>
+                    <div className="dropdown-menu">
+                      <Link href={isClient && isEn ? "/en/products" : "/urunler/kultur-taslari"} style={{
+                        display: 'block',
+                        padding: '10px 20px',
+                        color: '#333',
+                        textDecoration: 'none',
+                        fontSize: '14px',
+                        transition: 'background-color 0.2s',
+                        borderBottom: '1px solid #f0f0f0',
+                      }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
+                        <span style={{ color: '#FFA726 !important', marginRight: '8px', WebkitTextFillColor: '#FFA726' }}>•</span>
+                        {isClient && isEn ? 'Culture Stones' : 'Kültür Taşları'}
+                      </Link>
+                      <Link href={isClient && isEn ? "/en/products" : "/urunler/kultur-tuglalari"} style={{
+                        display: 'block',
+                        padding: '10px 20px',
+                        color: '#333',
+                        textDecoration: 'none',
+                        fontSize: '14px',
+                        transition: 'background-color 0.2s',
+                      }} onMouseEnter={(e) => (e.currentTarget as HTMLAnchorElement).style.background = '#f8f8f8'} onMouseLeave={(e) => (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'}>
+                        <span style={{ color: '#FB8C00 !important', marginRight: '8px', WebkitTextFillColor: '#FB8C00' }}>•</span>
+                        {isClient && isEn ? 'Culture Bricks' : 'Kültür Tuğlaları'}
+                      </Link>
+                    </div>
+                  </li>
+                  <li><Link href={isClient && isEn ? "/en/gallery" : "/galeri"}>{isClient && isEn ? "GALLERY" : "GÖRSEL GALERİ"}</Link></li>
+                  <li><Link href={isClient && isEn ? "/en/contact" : "/iletisim"}>{isClient && isEn ? "CONTACT US" : "BİZE ULAŞIN"}</Link></li>
+                </ul>
+              </ClientOnly>
             </nav>
 
             {/* Mobile overlay */}
             {isMobileMenuOpen && (
               <div
-                className="mobile-overlay"
+                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
                 aria-hidden="true"
-                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', zIndex: 1000 }}
               />
             )}
             

@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const breadcrumbMapTr: Record<string, string> = {
   '': 'Anasayfa',
@@ -48,8 +49,20 @@ function formatTitle(str: string) {
 
 export default function Breadcrumb() {
   const pathname = usePathname();
-  // Dil algısı
-  const isEn = pathname.startsWith('/en');
+  const [isClient, setIsClient] = useState(false);
+  const [isEn, setIsEn] = useState(false);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+    setIsEn(pathname.startsWith('/en'));
+  }, [pathname]);
+
+  // Don't render on server side to prevent hydration mismatch
+  if (!isClient) {
+    return null;
+  }
+
   // Parçaları al, eğer İngilizce ise baştaki 'en'i atla
   const parts = pathname.split('/').filter(Boolean);
   const realParts = isEn ? parts.slice(1) : parts;

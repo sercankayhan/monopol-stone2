@@ -6,7 +6,14 @@ import { usePathname } from 'next/navigation'
 
 export default function HeroSlider() {
   const pathname = usePathname()
-  const isEn = pathname.startsWith('/en')
+  const [isEn, setIsEn] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setIsClient(true)
+    setIsEn(pathname.startsWith('/en'))
+  }, [pathname])
   
   const [currentSlide, setCurrentSlide] = useState(0)
   const slides = [
@@ -48,14 +55,14 @@ export default function HeroSlider() {
               <div className="hero-content">
                 <h1>MONOPOL STONE</h1>
                 <p>
-                  {isEn 
+                  {isClient && isEn 
                     ? "We enhance your spaces with aesthetic and durability through our natural stone and artificial stone solutions. With Monopol Stone quality, we offer elegance and strength tailored to every project."
                     : "Doğal taş ve yapay taş çözümlerimizle mekanlarınıza estetik ve dayanıklılık katıyoruz. Monopol Stone kalitesiyle, her projeye özel şıklık ve sağlamlık sunuyoruz."
                   }
                 </p>
-                <Link href={isEn ? "/en" : "/urunler"}>
+                <Link href={isClient && isEn ? "/en/products" : "/urunler"}>
                   <button className="btn-primary">
-                    {isEn ? "EXPLORE OUR PRODUCTS" : "ÜRÜNLERİMİZİ İNCELEYİN"}
+                    {isClient && isEn ? "EXPLORE OUR PRODUCTS" : "ÜRÜNLERİMİZİ İNCELEYİN"}
                   </button>
                 </Link>
               </div>
