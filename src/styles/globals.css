@@ -25,6 +25,10 @@ body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Enhanced mobile optimization */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Performans için optimize edilmiş font tanımlaması */
@@ -53,7 +57,7 @@ html {
    MOBİL RESPONSİVE BREAKPOINTS
    ============================================== */
 
-/* Mobile Breakpoints */
+/* Enhanced Mobile Breakpoints and Variables */
 :root {
   --mobile-xs: 320px;    /* Small phones */
   --mobile-sm: 375px;    /* iPhone SE, Galaxy S */
@@ -65,12 +69,13 @@ html {
   --desktop-md: 1440px;  /* Medium desktop */
   --desktop-lg: 1920px;  /* Large desktop */
   
-  /* Responsive spacing */
+  /* Enhanced responsive spacing */
+  --container-padding-xs: 12px;     /* Extra small screens */
   --container-padding-mobile: 16px;
   --container-padding-tablet: 24px;
   --container-padding-desktop: 32px;
   
-  /* Typography scale for mobile */
+  /* Enhanced typography scale for mobile */
   --font-xs-mobile: 0.75rem;   /* 12px */
   --font-sm-mobile: 0.875rem;  /* 14px */
   --font-md-mobile: 1rem;      /* 16px */
@@ -79,6 +84,11 @@ html {
   --font-xxl-mobile: 1.5rem;   /* 24px */
   --font-3xl-mobile: 1.75rem;  /* 28px */
   --font-4xl-mobile: 2rem;     /* 32px */
+  
+  /* Mobile-specific variables */
+  --header-height-mobile: 100px;
+  --header-height-tablet: 120px;
+  --header-height-desktop: 180px;
 }
 
 /* Animasyonlu elementler için will-change */
@@ -87,7 +97,7 @@ html {
 }
 
 /* ==============================================
-   MOBİL RESPONSİVE STYLES
+   ENHANCED MOBİL RESPONSİVE STYLES
    ============================================== */
 
 /* Body padding for fixed header */
@@ -95,7 +105,14 @@ body {
   padding-top: 0;
 }
 
-@media (max-width: 767px) {
+/* Mobile First Approach */
+@media (max-width: 480px) {
+  body {
+    padding-top: 80px; /* Smaller header on very small screens without header-top */
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
   body {
     padding-top: 120px; /* Header height on mobile */
   }
@@ -124,20 +141,30 @@ body {
   }
 }
 
-/* Logo responsive sizing */
+/* Enhanced logo responsive sizing */
 .logo-container img {
-  height: 80px !important;
+  height: 60px !important;
+  max-width: 200px !important;
+}
+
+@media (min-width: 480px) {
+  .logo-container img {
+    height: 80px !important;
+    max-width: 250px !important;
+  }
 }
 
 @media (min-width: 768px) {
   .logo-container img {
     height: 120px !important;
+    max-width: 400px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .logo-container img {
     height: 160px !important;
+    max-width: 600px !important;
   }
 }
 
@@ -267,31 +294,62 @@ h5, h6 {
   }
 }
 
-/* Product grid responsive */
-.product-grid {
+/* Enhanced Product grid responsive */
+.product-grid, .product-grid-premium {
   display: grid;
-  gap: 20px;
+  gap: 16px;
   grid-template-columns: 1fr;
+  padding: 0 8px;
 }
 
-@media (min-width: 576px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575px) {
+  .product-grid, .product-grid-premium {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 4px;
   }
 }
 
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .product-grid, .product-grid-premium {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 0 8px;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .product-grid, .product-grid-premium {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 0;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .product-grid {
+  .product-grid, .product-grid-premium {
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
   }
 }
 
+/* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  .product-grid {
+  .product-grid, .product-grid-premium {
     grid-template-columns: repeat(4, 1fr);
     gap: 32px;
+  }
+}
+
+/* Ultra wide screens */
+@media (min-width: 1400px) {
+  .product-grid, .product-grid-premium {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 36px;
   }
 }
 
@@ -357,10 +415,22 @@ input, textarea, select {
   }
 }
 
-/* Touch targets - minimum 44px */
-button, .btn, a[role="button"], input[type="button"], input[type="submit"] {
+/* Enhanced touch targets for better mobile UX */
+button, .btn, a[role="button"], input[type="button"], input[type="submit"], 
+.mobile-menu-btn, .language-buttons button {
   min-height: 44px;
   min-width: 44px;
+  touch-action: manipulation; /* Prevents double-tap zoom */
+}
+
+/* Larger touch targets on very small screens */
+@media (max-width: 480px) {
+  button, .btn, a[role="button"], input[type="button"], input[type="submit"],
+  .mobile-menu-btn, .language-buttons button {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px 16px;
+  }
 }
 
 /* Prevent horizontal scroll */
@@ -719,6 +789,13 @@ a {
   font-size: 14px;
   background: #d8d8d8 !important;
   border-bottom: 1px solid #c0c0c0;
+}
+
+/* Hide header-top on very small screens to save space */
+@media (max-width: 480px) {
+  .header-top {
+    display: none;
+  }
 }
 
 .header-main {
@@ -1087,6 +1164,23 @@ section, main, .products, .features, .footer {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
+  /* Mobile optimization */
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Enhanced mobile product card styling */
+@media (max-width: 480px) {
+  .product-card-premium {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(44,62,80,0.08);
+    padding-bottom: 24px;
+  }
+  
+  .product-card-premium:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(44,62,80,0.12);
+  }
 }
 .product-card-premium:hover {
   transform: translateY(-8px) scale(1.03);
@@ -2910,6 +3004,61 @@ a:hover .product-card-premium {
   background: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+}
+
+/* ==============================================
+   ENHANCED MOBILE-FIRST RESPONSIVE DESIGN
+   ============================================== */
+
+/* Extra Small Devices (Portrait phones) */
+@media (max-width: 320px) {
+  .container {
+    padding: 0 var(--container-padding-xs);
+  }
+  
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .product-info-premium {
+    padding: 0 16px;
+  }
+  
+  .product-title-premium {
+    font-size: 1.2rem;
+  }
+  
+  .btn-premium {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Landscape */
+@media (max-width: 480px) and (orientation: landscape) {
+  body {
+    padding-top: 60px; /* Even smaller header for landscape */
+  }
+  
+  .hero-slider {
+    height: 40vh; /* Reduced height for landscape */
+  }
+  
+  .logo-container img {
+    height: 50px !important;
+  }
+}
+
+/* Improved touch interactions */
+@media (hover: none) and (pointer: coarse) {
+  .product-card-premium:hover {
+    transform: none; /* Remove hover effects on touch devices */
+    box-shadow: 0 8px 32px rgba(44,62,80,0.10);
+  }
+  
+  .btn-premium:hover {
+    background: linear-gradient(90deg, #e74c3c 0%, #fb8c00 100%);
+  }
 }
 
 /* Responsive Design */

@@ -22,15 +22,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'tr_TR',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: 'cover',
-  },
   manifest: '/manifest.json',
-  themeColor: '#FD7E14',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -47,6 +39,15 @@ export const metadata: Metadata = {
     'HandheldFriendly': 'True',
     'MobileOptimized': '320',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: '#FD7E14',
 }
 
 export default function RootLayout({
