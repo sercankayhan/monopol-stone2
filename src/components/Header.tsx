@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useErrorHandling } from '@/hooks/useErrorHandling';
 import { usePerformanceMonitoring } from '@/hooks/usePerformanceMonitoring';
+import SafeResponsiveNavigation from './SafeResponsiveNavigation';
 
 
 export default function Header() {
@@ -82,6 +83,7 @@ export default function Header() {
 
 
   return (
+    <SafeResponsiveNavigation>
     <header className={`header ${isScrolled ? 'scrolled' : ''}`} style={{
       position: 'fixed',
       top: 0,
@@ -292,9 +294,9 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* Enhanced Mobile Menu Button - Safe Implementation */}
               <button
-                className="mobile-menu-btn"
+                className="mobile-menu-btn responsive-nav-toggle"
                 onClick={toggleMobileMenu}
                 style={{
                   display: 'none',
@@ -305,18 +307,13 @@ export default function Header() {
                   borderRadius: '8px',
                   transition: 'background 0.3s ease',
                 }}
-                aria-label="Menu"
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="nav-menu"
+                id="responsive-nav-toggle"
               >
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-around',
-                  transform: isMobileMenuOpen ? 'rotate(45deg)' : 'none',
-                  transition: 'transform 0.3s ease',
-                }}>
-                  <span style={{
+                <span className="hamburger-menu">
+                  <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`} style={{
                     width: '100%',
                     height: '2px',
                     background: '#333',
@@ -324,16 +321,21 @@ export default function Header() {
                     transformOrigin: 'center',
                     transition: 'all 0.3s ease',
                     transform: isMobileMenuOpen ? 'rotate(90deg) translateY(0px)' : 'none',
+                    position: 'absolute',
+                    top: 0,
                   }} />
-                  <span style={{
+                  <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`} style={{
                     width: '100%',
                     height: '2px',
                     background: '#333',
                     borderRadius: '1px',
                     opacity: isMobileMenuOpen ? 0 : 1,
                     transition: 'opacity 0.3s ease',
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
                   }} />
-                  <span style={{
+                  <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`} style={{
                     width: '100%',
                     height: '2px',
                     background: '#333',
@@ -341,40 +343,46 @@ export default function Header() {
                     transformOrigin: 'center',
                     transition: 'all 0.3s ease',
                     transform: isMobileMenuOpen ? 'rotate(-90deg) translateY(0px)' : 'none',
+                    position: 'absolute',
+                    bottom: 0,
                   }} />
-                </div>
+                </span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 999,
-            opacity: isMobileMenuOpen ? 1 : 0,
-            transition: 'opacity 0.3s ease',
-          }}
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            document.body.style.overflow = 'auto';
-          }}
-        />
-      )}
+      {/* Enhanced Mobile Menu Overlay - Safe Implementation */}
+      <div
+        className={`mobile-menu-overlay responsive-nav-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+        id="responsive-nav-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 999,
+          opacity: isMobileMenuOpen ? 1 : 0,
+          transition: 'opacity 0.3s ease',
+          backdropFilter: 'blur(2px)',
+          pointerEvents: isMobileMenuOpen ? 'all' : 'none',
+          display: isMobileMenuOpen ? 'block' : 'none',
+        }}
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          document.body.style.overflow = 'auto';
+        }}
+        aria-hidden={!isMobileMenuOpen}
+      />
 
-      {/* Mobile Menu */}
+      {/* Enhanced Mobile Menu - Safe Implementation */}
       <div
         ref={menuRef}
-        className="mobile-menu"
+        className={`mobile-menu nav-menu existing-nav-preserved ${isMobileMenuOpen ? 'responsive-active' : ''}`}
+        id="nav-menu"
         style={{
           position: 'fixed',
           top: 0,
@@ -388,6 +396,9 @@ export default function Header() {
           flexDirection: 'column',
           boxShadow: '-2px 0 20px rgba(0, 0, 0, 0.1)',
         }}
+        aria-hidden={!isMobileMenuOpen}
+        role="navigation"
+        aria-labelledby="responsive-nav-toggle"
       >
         {/* Mobile Menu Header */}
         <div style={{
@@ -538,5 +549,6 @@ export default function Header() {
         </div>
       </div>
     </header>
+    </SafeResponsiveNavigation>
   )
 } 

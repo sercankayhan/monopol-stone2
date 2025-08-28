@@ -1,0 +1,607 @@
+/* Responsive Typography Enhancement Layer */
+/* Based on CLAUDE.md Part 1 - Advanced typography scaling and optimization */
+
+/* ==============================================
+   FLUID TYPOGRAPHY SYSTEM
+   ============================================== */
+
+:root {
+  /* Fluid typography variables */
+  --fluid-min-width: 320;
+  --fluid-max-width: 1200;
+  --fluid-screen: 100vw;
+  
+  /* Base font sizes (in px for calculations) */
+  --font-size-xs-min: 12;
+  --font-size-xs-max: 14;
+  --font-size-sm-min: 14;
+  --font-size-sm-max: 16;
+  --font-size-md-min: 16;
+  --font-size-md-max: 18;
+  --font-size-lg-min: 18;
+  --font-size-lg-max: 20;
+  --font-size-xl-min: 20;
+  --font-size-xl-max: 24;
+  --font-size-2xl-min: 24;
+  --font-size-2xl-max: 30;
+  --font-size-3xl-min: 30;
+  --font-size-3xl-max: 36;
+  --font-size-4xl-min: 36;
+  --font-size-4xl-max: 48;
+  --font-size-5xl-min: 48;
+  --font-size-5xl-max: 60;
+  
+  /* Line height scale */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Letter spacing scale */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+}
+
+/* ==============================================
+   FLUID FONT SIZE CALCULATIONS
+   ============================================== */
+
+/* Utility function for fluid typography */
+.text-fluid-xs {
+  font-size: clamp(
+    calc(var(--font-size-xs-min) / 16 * 1rem),
+    calc(var(--font-size-xs-min) / 16 * 1rem + (var(--font-size-xs-max) - var(--font-size-xs-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-xs-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-sm {
+  font-size: clamp(
+    calc(var(--font-size-sm-min) / 16 * 1rem),
+    calc(var(--font-size-sm-min) / 16 * 1rem + (var(--font-size-sm-max) - var(--font-size-sm-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-sm-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-base {
+  font-size: clamp(
+    calc(var(--font-size-md-min) / 16 * 1rem),
+    calc(var(--font-size-md-min) / 16 * 1rem + (var(--font-size-md-max) - var(--font-size-md-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-md-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-lg {
+  font-size: clamp(
+    calc(var(--font-size-lg-min) / 16 * 1rem),
+    calc(var(--font-size-lg-min) / 16 * 1rem + (var(--font-size-lg-max) - var(--font-size-lg-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-lg-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-xl {
+  font-size: clamp(
+    calc(var(--font-size-xl-min) / 16 * 1rem),
+    calc(var(--font-size-xl-min) / 16 * 1rem + (var(--font-size-xl-max) - var(--font-size-xl-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-xl-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-2xl {
+  font-size: clamp(
+    calc(var(--font-size-2xl-min) / 16 * 1rem),
+    calc(var(--font-size-2xl-min) / 16 * 1rem + (var(--font-size-2xl-max) - var(--font-size-2xl-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-2xl-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-3xl {
+  font-size: clamp(
+    calc(var(--font-size-3xl-min) / 16 * 1rem),
+    calc(var(--font-size-3xl-min) / 16 * 1rem + (var(--font-size-3xl-max) - var(--font-size-3xl-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-3xl-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-4xl {
+  font-size: clamp(
+    calc(var(--font-size-4xl-min) / 16 * 1rem),
+    calc(var(--font-size-4xl-min) / 16 * 1rem + (var(--font-size-4xl-max) - var(--font-size-4xl-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-4xl-max) / 16 * 1rem)
+  );
+}
+
+.text-fluid-5xl {
+  font-size: clamp(
+    calc(var(--font-size-5xl-min) / 16 * 1rem),
+    calc(var(--font-size-5xl-min) / 16 * 1rem + (var(--font-size-5xl-max) - var(--font-size-5xl-min)) * (var(--fluid-screen) - calc(var(--fluid-min-width) / 16 * 1rem)) / (var(--fluid-max-width) - var(--fluid-min-width))),
+    calc(var(--font-size-5xl-max) / 16 * 1rem)
+  );
+}
+
+/* ==============================================
+   ENHANCED HEADING SYSTEM
+   ============================================== */
+
+/* Safe heading enhancements that don't override existing */
+.heading-responsive h1,
+h1.text-responsive {
+  font-size: clamp(1.875rem, 2.2vw + 1.5rem, 3rem);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
+}
+
+.heading-responsive h2,
+h2.text-responsive {
+  font-size: clamp(1.5rem, 1.8vw + 1.2rem, 2.5rem);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: clamp(0.625rem, 0.8vw + 0.4rem, 1.25rem);
+}
+
+.heading-responsive h3,
+h3.text-responsive {
+  font-size: clamp(1.25rem, 1.5vw + 1rem, 2rem);
+  line-height: var(--line-height-snug);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-normal);
+  margin-bottom: clamp(0.5rem, 0.6vw + 0.3rem, 1rem);
+}
+
+.heading-responsive h4,
+h4.text-responsive {
+  font-size: clamp(1.125rem, 1.2vw + 0.9rem, 1.5rem);
+  line-height: var(--line-height-snug);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-normal);
+  margin-bottom: clamp(0.375rem, 0.4vw + 0.25rem, 0.75rem);
+}
+
+.heading-responsive h5,
+h5.text-responsive {
+  font-size: clamp(1rem, 1vw + 0.8rem, 1.25rem);
+  line-height: var(--line-height-normal);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-normal);
+  margin-bottom: clamp(0.25rem, 0.3vw + 0.2rem, 0.5rem);
+}
+
+.heading-responsive h6,
+h6.text-responsive {
+  font-size: clamp(0.875rem, 0.8vw + 0.7rem, 1.125rem);
+  line-height: var(--line-height-normal);
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: clamp(0.25rem, 0.3vw + 0.2rem, 0.5rem);
+  text-transform: uppercase;
+}
+
+/* ==============================================
+   BODY TEXT ENHANCEMENTS
+   ============================================== */
+
+.text-body-responsive,
+.text-responsive p {
+  font-size: clamp(0.875rem, 0.5vw + 0.75rem, 1.125rem);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: clamp(0.75rem, 0.6vw + 0.5rem, 1.25rem);
+}
+
+.text-body-large {
+  font-size: clamp(1rem, 0.6vw + 0.85rem, 1.25rem);
+  line-height: var(--line-height-relaxed);
+}
+
+.text-body-small {
+  font-size: clamp(0.75rem, 0.4vw + 0.65rem, 1rem);
+  line-height: var(--line-height-normal);
+}
+
+.text-caption {
+  font-size: clamp(0.625rem, 0.3vw + 0.55rem, 0.875rem);
+  line-height: var(--line-height-normal);
+  color: #666;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ==============================================
+   RESPONSIVE TEXT UTILITIES
+   ============================================== */
+
+/* Text alignment utilities */
+.text-center-mobile {
+  text-align: center;
+}
+
+.text-left-mobile {
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .text-left-desktop {
+    text-align: left;
+  }
+  
+  .text-center-desktop {
+    text-align: center;
+  }
+  
+  .text-right-desktop {
+    text-align: right;
+  }
+  
+  .text-justify-desktop {
+    text-align: justify;
+  }
+}
+
+/* Line height utilities */
+.leading-tight {
+  line-height: var(--line-height-tight);
+}
+
+.leading-snug {
+  line-height: var(--line-height-snug);
+}
+
+.leading-normal {
+  line-height: var(--line-height-normal);
+}
+
+.leading-relaxed {
+  line-height: var(--line-height-relaxed);
+}
+
+.leading-loose {
+  line-height: var(--line-height-loose);
+}
+
+/* Letter spacing utilities */
+.tracking-tighter {
+  letter-spacing: var(--letter-spacing-tighter);
+}
+
+.tracking-tight {
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.tracking-normal {
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.tracking-wide {
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.tracking-wider {
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+.tracking-widest {
+  letter-spacing: var(--letter-spacing-widest);
+}
+
+/* ==============================================
+   ADAPTIVE TEXT SCALING
+   ============================================== */
+
+/* Container-based text scaling */
+@supports (container-type: inline-size) {
+  .text-container-adaptive {
+    container-type: inline-size;
+  }
+  
+  @container (max-width: 300px) {
+    .text-container-adaptive h1 { font-size: 1.5rem; }
+    .text-container-adaptive h2 { font-size: 1.25rem; }
+    .text-container-adaptive p { font-size: 0.875rem; }
+  }
+  
+  @container (min-width: 300px) and (max-width: 600px) {
+    .text-container-adaptive h1 { font-size: 2rem; }
+    .text-container-adaptive h2 { font-size: 1.75rem; }
+    .text-container-adaptive p { font-size: 1rem; }
+  }
+  
+  @container (min-width: 600px) {
+    .text-container-adaptive h1 { font-size: 2.5rem; }
+    .text-container-adaptive h2 { font-size: 2rem; }
+    .text-container-adaptive p { font-size: 1.125rem; }
+  }
+}
+
+/* Fallback for browsers without container queries */
+.text-container-adaptive:not(.supports-container-queries) h1 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.text-container-adaptive:not(.supports-container-queries) h2 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+}
+
+.text-container-adaptive:not(.supports-container-queries) p {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+}
+
+/* ==============================================
+   READING EXPERIENCE ENHANCEMENTS
+   ============================================== */
+
+/* Optimal reading width */
+.text-readable {
+  max-width: 65ch; /* Optimal reading width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Enhanced readability class */
+.text-enhanced-readability {
+  font-size: clamp(1rem, 0.5vw + 0.85rem, 1.25rem);
+  line-height: 1.6;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+  color: #2a2a2a;
+}
+
+/* Dark mode text adjustments */
+@media (prefers-color-scheme: dark) {
+  .text-enhanced-readability {
+    color: #e0e0e0;
+  }
+  
+  .text-caption {
+    color: #999;
+  }
+}
+
+/* ==============================================
+   TYPOGRAPHY ANIMATION
+   ============================================== */
+
+/* Typewriter effect */
+.text-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: currentColor; }
+}
+
+/* Fade in text animation */
+.text-fade-in {
+  opacity: 0;
+  animation: fadeInText 1s ease-in-out forwards;
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; }
+}
+
+/* Slide up text animation */
+.text-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUpText 0.8s ease-out forwards;
+}
+
+@keyframes slideUpText {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================== */
+
+/* High contrast text */
+@media (prefers-contrast: high) {
+  .text-enhanced-readability,
+  .text-body-responsive,
+  .text-responsive p {
+    color: currentColor;
+    font-weight: 500;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .text-typewriter,
+  .text-fade-in,
+  .text-slide-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    border-right: none;
+  }
+}
+
+/* Focus indicators for interactive text */
+.text-interactive:focus {
+  outline: 2px solid #FD7E14;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==============================================
+   PRINT OPTIMIZATIONS
+   ============================================== */
+
+@media print {
+  .text-fluid-xs,
+  .text-fluid-sm,
+  .text-fluid-base,
+  .text-fluid-lg,
+  .text-fluid-xl,
+  .text-fluid-2xl,
+  .text-fluid-3xl,
+  .text-fluid-4xl,
+  .text-fluid-5xl {
+    font-size: initial;
+  }
+  
+  .heading-responsive h1,
+  h1.text-responsive {
+    font-size: 24pt;
+    page-break-after: avoid;
+  }
+  
+  .heading-responsive h2,
+  h2.text-responsive {
+    font-size: 18pt;
+    page-break-after: avoid;
+  }
+  
+  .heading-responsive h3,
+  h3.text-responsive {
+    font-size: 14pt;
+    page-break-after: avoid;
+  }
+  
+  .text-body-responsive,
+  .text-responsive p {
+    font-size: 11pt;
+    line-height: 1.4;
+    orphans: 3;
+    widows: 3;
+  }
+  
+  .text-typewriter,
+  .text-fade-in,
+  .text-slide-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    border: none;
+  }
+}
+
+/* ==============================================
+   LEGACY BROWSER FALLBACKS
+   ============================================== */
+
+/* Fallbacks for browsers without clamp() support */
+@supports not (font-size: clamp(1rem, 2vw, 2rem)) {
+  .text-fluid-xs { font-size: 0.75rem; }
+  .text-fluid-sm { font-size: 0.875rem; }
+  .text-fluid-base { font-size: 1rem; }
+  .text-fluid-lg { font-size: 1.125rem; }
+  .text-fluid-xl { font-size: 1.25rem; }
+  .text-fluid-2xl { font-size: 1.5rem; }
+  .text-fluid-3xl { font-size: 1.875rem; }
+  .text-fluid-4xl { font-size: 2.25rem; }
+  .text-fluid-5xl { font-size: 3rem; }
+  
+  @media (min-width: 768px) {
+    .text-fluid-xs { font-size: 0.875rem; }
+    .text-fluid-sm { font-size: 1rem; }
+    .text-fluid-base { font-size: 1.125rem; }
+    .text-fluid-lg { font-size: 1.25rem; }
+    .text-fluid-xl { font-size: 1.5rem; }
+    .text-fluid-2xl { font-size: 1.875rem; }
+    .text-fluid-3xl { font-size: 2.25rem; }
+    .text-fluid-4xl { font-size: 3rem; }
+    .text-fluid-5xl { font-size: 3.75rem; }
+  }
+}
+
+/* ==============================================
+   UTILITY CLASSES
+   ============================================== */
+
+/* Text wrapping utilities */
+.text-wrap {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.text-no-wrap {
+  white-space: nowrap;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Text transformation utilities */
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-normal-case {
+  text-transform: none;
+}
+
+/* Font weight utilities */
+.font-thin { font-weight: 100; }
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+.font-black { font-weight: 900; }
+
+/* Text decoration utilities */
+.text-underline {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.125em;
+}
+
+.text-overline {
+  text-decoration: overline;
+}
+
+.text-line-through {
+  text-decoration: line-through;
+}
+
+.text-no-underline {
+  text-decoration: none;
+}
+
+/* Text selection styling */
+.text-select-none {
+  user-select: none;
+}
+
+.text-select-text {
+  user-select: text;
+}
+
+::selection {
+  background-color: rgba(253, 126, 20, 0.2);
+  color: inherit;
+}

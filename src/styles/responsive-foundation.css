@@ -1,0 +1,598 @@
+/* Safe Responsive Foundation CSS - Enhancement Layer */
+/* Based on CLAUDE.md Part 1 - Non-breaking responsive implementation */
+
+/* ==============================================
+   SAFE RESPONSIVE FOUNDATION - ADDITIVE ONLY
+   ============================================== */
+
+/* Add responsive foundation WITHOUT touching existing styles */
+.responsive-base {
+    box-sizing: border-box;
+}
+
+.responsive-base *,
+.responsive-base *::before,
+.responsive-base *::after {
+    box-sizing: inherit;
+}
+
+/* New responsive container system - parallel to existing */
+.responsive-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+    .responsive-container {
+        padding: 0 2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .responsive-container {
+        padding: 0 3rem;
+    }
+}
+
+/* Progressive enhancement classes - only applied when needed */
+.make-responsive {
+    max-width: 100%;
+    height: auto;
+}
+
+.make-flex-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media (max-width: 767.98px) {
+    .make-flex-responsive {
+        flex-direction: column;
+    }
+}
+
+/* Safe responsive utilities that don't conflict */
+.responsive-hide-mobile {
+    display: block;
+}
+
+.responsive-hide-desktop {
+    display: block;
+}
+
+@media (max-width: 767.98px) {
+    .responsive-hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .responsive-hide-desktop {
+        display: none !important;
+    }
+}
+
+/* ==============================================
+   GRADUAL MIGRATION CLASSES
+   ============================================== */
+
+/* Safe width overrides - only when explicitly applied */
+.responsive-width {
+    width: auto !important;
+    max-width: 100% !important;
+}
+
+.responsive-padding {
+    padding-left: clamp(1rem, 3vw, 2rem) !important;
+    padding-right: clamp(1rem, 3vw, 2rem) !important;
+}
+
+.responsive-margin {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Existing element enhancement - non-breaking */
+.enhance-responsive {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 767.98px) {
+    .enhance-responsive {
+        font-size: 0.9em;
+        padding: 0.75em;
+    }
+}
+
+/* Grid system that coexists with existing layout */
+.new-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .new-grid {
+        gap: 2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .new-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+/* ==============================================
+   PROGRESSIVE ENHANCEMENT FEATURES
+   ============================================== */
+
+/* Feature detection and progressive enhancement */
+.progressive-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Enhanced styles only where supported */
+@supports (display: grid) {
+    .progressive-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
+/* Fallback for older browsers */
+.progressive-grid:not(.grid-supported) {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.5rem;
+}
+
+.progressive-grid:not(.grid-supported) > * {
+    flex: 1 1 250px;
+    margin: 0.5rem;
+}
+
+/* Container queries where supported */
+@supports (container-type: inline-size) {
+    .progressive-container {
+        container-type: inline-size;
+    }
+    
+    @container (min-width: 400px) {
+        .responsive-card {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+/* Clamp() function progressive enhancement */
+@supports (width: clamp(1rem, 5vw, 3rem)) {
+    .progressive-spacing {
+        padding: clamp(1rem, 3vw, 2rem);
+        font-size: clamp(0.875rem, 1.2vw, 1.125rem);
+    }
+}
+
+/* Fallback for browsers without clamp() */
+.progressive-spacing {
+    padding: 1rem;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .progressive-spacing {
+        padding: 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .progressive-spacing {
+        padding: 2rem;
+        font-size: 1.125rem;
+    }
+}
+
+/* ==============================================
+   ENHANCED HAMBURGER MENU SYSTEM - SAFE
+   ============================================== */
+
+/* Only show hamburger on mobile - desktop navigation untouched */
+@media (max-width: 767.98px) {
+    .responsive-nav-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 1001;
+        position: relative;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+}
+
+.responsive-nav-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.responsive-nav-toggle:focus {
+    outline: 2px solid #FD7E14;
+    outline-offset: 2px;
+}
+
+/* Enhanced hamburger animation styles */
+.hamburger-menu {
+    display: block;
+    width: 24px;
+    height: 18px;
+    position: relative;
+}
+
+.hamburger-line {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: #333;
+    border-radius: 1px;
+    position: absolute;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center;
+}
+
+.hamburger-line:nth-child(1) { top: 0; }
+.hamburger-line:nth-child(2) { 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+.hamburger-line:nth-child(3) { bottom: 0; }
+
+/* Active hamburger animation */
+.responsive-nav-toggle.active .hamburger-line:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.responsive-nav-toggle.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0);
+}
+
+.responsive-nav-toggle.active .hamburger-line:nth-child(3) {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+}
+
+/* Desktop navigation - completely preserved */
+@media (min-width: 768px) {
+    .nav-menu.existing-nav-preserved {
+        /* Your existing desktop styles remain unchanged */
+        /* Add only non-conflicting enhancements if needed */
+    }
+    
+    .responsive-nav-toggle {
+        display: none !important;
+    }
+}
+
+/* Mobile navigation overlay - only affects mobile */
+@media (max-width: 767.98px) {
+    /* Transform existing navigation for mobile */
+    .nav-menu.existing-nav-preserved {
+        position: fixed !important;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: #ffffff;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        overflow-y: auto;
+        padding-top: 80px;
+    }
+
+    .nav-menu.existing-nav-preserved.responsive-active {
+        right: 0;
+    }
+
+    /* Enhance existing navigation items for mobile */
+    .nav-menu.existing-nav-preserved ul {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 1rem;
+        gap: 0 !important;
+    }
+
+    .nav-menu.existing-nav-preserved li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .nav-menu.existing-nav-preserved li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu.existing-nav-preserved a {
+        display: block !important;
+        padding: 1rem !important;
+        font-size: 1.1rem !important;
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu.existing-nav-preserved a:hover {
+        background-color: #f8f9fa !important;
+        padding-left: 1.5rem !important;
+    }
+}
+
+/* Overlay styles */
+.responsive-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+}
+
+.responsive-nav-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Prevent body scroll when menu is open */
+.responsive-nav-open {
+    overflow: hidden !important;
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+/* Enhanced focus indicators */
+.responsive-focus-enhanced:focus {
+    outline: 3px solid #FD7E14;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Screen reader utilities */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Enhanced touch targets */
+.touch-target-enhanced {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+}
+
+/* ==============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================== */
+
+/* Enhanced will-change for animations */
+.responsive-animated {
+    will-change: transform, opacity;
+}
+
+/* Hardware acceleration */
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Scroll performance */
+.smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+}
+
+/* ==============================================
+   SAFE BREAKPOINT SYSTEM
+   ============================================== */
+
+/* Enhanced breakpoint variables - coexists with existing system */
+:root {
+    --responsive-xs: 320px;
+    --responsive-sm: 375px;
+    --responsive-md: 768px;
+    --responsive-lg: 1024px;
+    --responsive-xl: 1200px;
+    --responsive-xxl: 1400px;
+    
+    /* Safe spacing system */
+    --responsive-space-xs: 0.25rem;
+    --responsive-space-sm: 0.5rem;
+    --responsive-space-md: 1rem;
+    --responsive-space-lg: 1.5rem;
+    --responsive-space-xl: 2rem;
+    
+    /* Safe typography scale */
+    --responsive-text-xs: 0.75rem;
+    --responsive-text-sm: 0.875rem;
+    --responsive-text-base: 1rem;
+    --responsive-text-lg: 1.125rem;
+    --responsive-text-xl: 1.25rem;
+    --responsive-text-2xl: 1.5rem;
+    --responsive-text-3xl: 1.875rem;
+    --responsive-text-4xl: 2.25rem;
+}
+
+/* ==============================================
+   UTILITY CLASSES - SAFE ADDITIONS
+   ============================================== */
+
+/* Responsive text alignment */
+.text-center-mobile {
+    text-align: center;
+}
+
+.text-left-mobile {
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .text-left-desktop {
+        text-align: left;
+    }
+    
+    .text-center-desktop {
+        text-align: center;
+    }
+    
+    .text-right-desktop {
+        text-align: right;
+    }
+}
+
+/* Responsive spacing utilities */
+.space-y-responsive > * + * {
+    margin-top: var(--responsive-space-md);
+}
+
+@media (min-width: 768px) {
+    .space-y-responsive > * + * {
+        margin-top: var(--responsive-space-lg);
+    }
+}
+
+/* Responsive flex utilities */
+.flex-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--responsive-space-md);
+}
+
+@media (max-width: 767.98px) {
+    .flex-responsive {
+        flex-direction: column;
+        gap: var(--responsive-space-sm);
+    }
+}
+
+/* Safe responsive grid */
+.grid-responsive {
+    display: grid;
+    gap: var(--responsive-space-md);
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+    .grid-responsive {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .grid-responsive {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--responsive-space-lg);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-responsive {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--responsive-space-xl);
+    }
+}
+
+/* ==============================================
+   PRINT STYLES - RESPONSIVE SAFE
+   ============================================== */
+
+@media print {
+    .responsive-hide-print {
+        display: none !important;
+    }
+    
+    .responsive-nav-toggle,
+    .mobile-menu,
+    .responsive-nav-overlay {
+        display: none !important;
+    }
+    
+    .nav-menu.existing-nav-preserved {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+        padding: 0 !important;
+    }
+}
+
+/* ==============================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================== */
+
+@media (prefers-contrast: high) {
+    .responsive-nav-toggle {
+        border: 2px solid currentColor;
+    }
+    
+    .hamburger-line {
+        background-color: currentColor;
+    }
+    
+    .responsive-nav-overlay {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* ==============================================
+   REDUCED MOTION SUPPORT
+   ============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .responsive-nav-toggle,
+    .hamburger-line,
+    .nav-menu.existing-nav-preserved,
+    .responsive-nav-overlay,
+    .enhance-responsive {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT (OPTIONAL)
+   ============================================== */
+
+@media (prefers-color-scheme: dark) {
+    .responsive-nav-overlay {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    .nav-menu.existing-nav-preserved {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .hamburger-line {
+        background-color: #ffffff;
+    }
+}

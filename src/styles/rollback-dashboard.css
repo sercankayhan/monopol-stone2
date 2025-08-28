@@ -1,0 +1,748 @@
+/* Emergency Rollback Dashboard CSS */
+/* Based on CLAUDE-PART2.md - Rollback system styling */
+
+/* ==============================================
+   ROLLBACK DASHBOARD BASE
+   ============================================== */
+
+.rollback-dashboard {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 400px;
+  max-width: calc(100vw - 20px);
+  max-height: 90vh;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
+  z-index: 10002;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .rollback-dashboard {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+}
+
+/* ==============================================
+   DASHBOARD HEADER
+   ============================================== */
+
+.rollback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rollback-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.system-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rollback-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.rollback-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.rollback-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.rollback-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rollback-button.create {
+  background: rgba(34, 197, 94, 0.3);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+}
+
+.rollback-button.emergency {
+  background: rgba(245, 101, 101, 0.4);
+  border: 1px solid rgba(245, 101, 101, 0.6);
+  animation: pulse-danger 2s ease-in-out infinite;
+}
+
+.rollback-button.close {
+  background: rgba(156, 163, 175, 0.3);
+  font-size: 16px;
+  padding: 4px 8px;
+}
+
+@keyframes pulse-danger {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); 
+  }
+  70% { 
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); 
+  }
+}
+
+/* ==============================================
+   SYSTEM STATUS PANEL
+   ============================================== */
+
+.system-status-panel {
+  padding: 16px 20px;
+  background: rgba(254, 242, 242, 0.8);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.1);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.status-item {
+  text-align: center;
+}
+
+.status-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.status-value {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ==============================================
+   HEALTH METRICS
+   ============================================== */
+
+.health-metrics {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(248, 250, 252, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+}
+
+.metrics-updated {
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px 20px;
+}
+
+.metric-card {
+  background: white;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.metric-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ==============================================
+   ROLLBACK POINTS
+   ============================================== */
+
+.rollback-points {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.points-header {
+  padding: 12px 20px;
+  background: rgba(248, 250, 252, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+}
+
+.points-list {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.points-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.points-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.points-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.point-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background 0.2s ease;
+}
+
+.point-item:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.point-item:last-child {
+  border-bottom: none;
+}
+
+.point-item.latest {
+  background: rgba(34, 197, 94, 0.05);
+  border-left: 4px solid #22c55e;
+}
+
+.point-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.point-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.point-label {
+  font-weight: 600;
+  font-size: 12px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.point-auto {
+  font-size: 9px;
+  padding: 2px 4px;
+  background: rgba(249, 115, 22, 0.2);
+  color: #ea580c;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.point-latest {
+  font-size: 9px;
+  padding: 2px 4px;
+  background: rgba(34, 197, 94, 0.2);
+  color: #16a34a;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.point-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.point-time {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+}
+
+.point-ago {
+  font-style: italic;
+}
+
+.point-actions {
+  flex-shrink: 0;
+}
+
+.point-rollback-btn {
+  padding: 4px 8px;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  background: white;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.point-rollback-btn:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* ==============================================
+   CONFIRMATION DIALOG
+   ============================================== */
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10003;
+  animation: fade-in 0.2s ease-out;
+}
+
+.confirm-dialog {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: calc(100vw - 40px);
+  animation: scale-in 0.2s ease-out;
+}
+
+.confirm-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.confirm-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm-content {
+  padding: 20px 24px;
+  line-height: 1.5;
+}
+
+.confirm-content p {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.confirm-content p:last-child {
+  margin-bottom: 0;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px;
+  justify-content: flex-end;
+}
+
+.confirm-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirm-btn.cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.confirm-btn.cancel:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.confirm-btn.danger {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.confirm-btn.danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==============================================
+   EMERGENCY INSTRUCTIONS
+   ============================================== */
+
+.emergency-instructions {
+  padding: 16px 20px;
+  background: rgba(255, 247, 237, 0.8);
+  border-top: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.emergency-instructions details {
+  font-size: 12px;
+}
+
+.emergency-instructions summary {
+  font-weight: 600;
+  color: #d97706;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.instructions-content {
+  padding: 12px 0 0 24px;
+  color: #92400e;
+}
+
+.instructions-content h4 {
+  margin: 16px 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #78350f;
+}
+
+.instructions-content h4:first-child {
+  margin-top: 0;
+}
+
+.instructions-content ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.instructions-content li {
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.instructions-content kbd {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+.instructions-content code {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+}
+
+/* ==============================================
+   EMPTY STATE
+   ============================================== */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.empty-state p {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+}
+
+.empty-action-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.empty-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ==============================================
+   COLOR UTILITIES
+   ============================================== */
+
+.text-green-600 { color: #059669; }
+.text-red-600 { color: #dc2626; }
+.text-yellow-600 { color: #d97706; }
+.text-blue-600 { color: #2563eb; }
+.text-orange-600 { color: #ea580c; }
+.text-red-800 { color: #991b1b; }
+
+/* ==============================================
+   MOBILE OPTIMIZATIONS
+   ============================================== */
+
+@media (max-width: 767px) {
+  .rollback-dashboard {
+    font-size: 12px;
+  }
+  
+  .rollback-header {
+    padding: 12px 16px;
+  }
+  
+  .rollback-title {
+    font-size: 13px;
+  }
+  
+  .system-status {
+    font-size: 10px;
+  }
+  
+  .rollback-controls {
+    gap: 6px;
+  }
+  
+  .rollback-button {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+  
+  .point-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .point-actions {
+    align-self: flex-end;
+  }
+  
+  .confirm-dialog {
+    margin: 20px;
+    width: calc(100vw - 40px);
+  }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+
+@media (prefers-color-scheme: dark) {
+  .rollback-dashboard {
+    background: rgba(17, 24, 39, 0.98);
+    border-color: #ef4444;
+    color: #f9fafb;
+  }
+  
+  .system-status-panel,
+  .metrics-header,
+  .points-header {
+    background: rgba(31, 41, 55, 0.8);
+  }
+  
+  .metric-card {
+    background: rgba(55, 65, 81, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .point-item.latest {
+    background: rgba(34, 197, 94, 0.1);
+  }
+  
+  .point-label {
+    color: #f9fafb;
+  }
+  
+  .point-meta {
+    color: #9ca3af;
+  }
+  
+  .confirm-dialog {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .confirm-btn.cancel {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .instructions-content {
+    color: #fbbf24;
+  }
+  
+  .instructions-content h4 {
+    color: #f59e0b;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .rollback-dashboard {
+    position: static;
+    box-shadow: none;
+    border: 2px solid #000;
+    background: white;
+    color: black;
+    page-break-inside: avoid;
+  }
+  
+  .rollback-controls,
+  .point-actions,
+  .confirm-overlay,
+  .empty-action-button {
+    display: none;
+  }
+}
+
+/* ==============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================== */
+
+.rollback-dashboard,
+.metric-card,
+.point-item {
+  contain: layout style paint;
+}
+
+.rollback-button,
+.point-rollback-btn,
+.confirm-btn {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.points-list {
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,536 @@
+/* Touch Gesture Enhancement CSS */
+/* Based on CLAUDE.md Part 1 - Safe touch interaction styling */
+
+/* ==============================================
+   TOUCH ENHANCED BASE
+   ============================================== */
+
+.touch-enhanced {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text selection during touch interactions */
+.touch-enhanced * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ==============================================
+   TOUCH BUTTON STYLES
+   ============================================== */
+
+.touch-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  background: transparent;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Button Sizes */
+.touch-button-sm {
+  min-height: 36px;
+  min-width: 36px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+.touch-button-md {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.touch-button-lg {
+  min-height: 52px;
+  min-width: 52px;
+  padding: 16px 32px;
+  font-size: 1.125rem;
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .touch-button-sm {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 18px;
+  }
+  
+  .touch-button-md {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 14px 26px;
+  }
+  
+  .touch-button-lg {
+    min-height: 56px;
+    min-width: 56px;
+    padding: 18px 34px;
+  }
+}
+
+/* Button Variants */
+.touch-button-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.touch-button-primary:hover:not(.touch-button-disabled) {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+.touch-button-secondary {
+  background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+  color: #667eea;
+  border: 2px solid #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.touch-button-secondary:hover:not(.touch-button-disabled) {
+  background: linear-gradient(135deg, #667eea30 0%, #764ba230 100%);
+  border-color: #5a6fd8;
+  color: #5a6fd8;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.touch-button-outline {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+  box-shadow: none;
+}
+
+.touch-button-outline:hover:not(.touch-button-disabled) {
+  background: #667eea;
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Button States */
+.touch-button-pressed {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.touch-button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #e5e7eb;
+  color: #9ca3af;
+  border-color: #d1d5db;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ==============================================
+   TOUCH RIPPLE EFFECT
+   ============================================== */
+
+.touch-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  z-index: 1;
+}
+
+@keyframes ripple-animation {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Dark ripple for light buttons */
+.touch-button-secondary .touch-ripple,
+.touch-button-outline .touch-ripple {
+  background: rgba(102, 126, 234, 0.4);
+}
+
+/* ==============================================
+   SWIPEABLE CONTAINER
+   ============================================== */
+
+.swipeable-container {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.swipeable-container:active {
+  cursor: grabbing;
+}
+
+/* Swipe indicators */
+.swipeable-container::before,
+.swipeable-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.swipeable-container::before {
+  left: 10px;
+  background: linear-gradient(45deg, transparent 40%, rgba(102, 126, 234, 0.6) 50%, transparent 60%);
+}
+
+.swipeable-container::after {
+  right: 10px;
+  background: linear-gradient(-45deg, transparent 40%, rgba(102, 126, 234, 0.6) 50%, transparent 60%);
+}
+
+.swipeable-container:hover::before,
+.swipeable-container:hover::after {
+  opacity: 1;
+}
+
+/* ==============================================
+   TOUCH FEEDBACK ENHANCEMENTS
+   ============================================== */
+
+/* Haptic feedback simulation via animation */
+.touch-haptic-light {
+  animation: haptic-light 0.1s ease-out;
+}
+
+.touch-haptic-medium {
+  animation: haptic-medium 0.15s ease-out;
+}
+
+.touch-haptic-heavy {
+  animation: haptic-heavy 0.2s ease-out;
+}
+
+@keyframes haptic-light {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes haptic-medium {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes haptic-heavy {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.08); }
+  75% { transform: scale(1.03); }
+}
+
+/* ==============================================
+   GESTURE VISUAL FEEDBACK
+   ============================================== */
+
+/* Long press indication */
+.touch-long-press-active {
+  position: relative;
+  overflow: hidden;
+}
+
+.touch-long-press-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(102, 126, 234, 0.3) 50%, 
+    transparent 100%
+  );
+  animation: long-press-progress 0.5s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes long-press-progress {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Pinch gesture feedback */
+.touch-pinch-active {
+  transform-origin: center;
+  transition: transform 0.1s ease-out;
+}
+
+/* Pan gesture feedback */
+.touch-pan-active {
+  cursor: grabbing;
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Swipe gesture feedback */
+.touch-swipe-left {
+  animation: swipe-left 0.3s ease-out;
+}
+
+.touch-swipe-right {
+  animation: swipe-right 0.3s ease-out;
+}
+
+.touch-swipe-up {
+  animation: swipe-up 0.3s ease-out;
+}
+
+.touch-swipe-down {
+  animation: swipe-down 0.3s ease-out;
+}
+
+@keyframes swipe-left {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes swipe-right {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes swipe-up {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes swipe-down {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+/* Focus indicators for keyboard users */
+.touch-button:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .touch-button {
+    border: 2px solid currentColor;
+  }
+  
+  .touch-button-primary {
+    background: #000;
+    color: #fff;
+  }
+  
+  .touch-ripple {
+    background: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .touch-button,
+  .swipeable-container {
+    transition: none;
+  }
+  
+  .touch-button:hover {
+    transform: none;
+  }
+  
+  .touch-ripple {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .touch-haptic-light,
+  .touch-haptic-medium,
+  .touch-haptic-heavy {
+    animation: none;
+  }
+  
+  .touch-swipe-left,
+  .touch-swipe-right,
+  .touch-swipe-up,
+  .touch-swipe-down {
+    animation: none;
+  }
+}
+
+/* ==============================================
+   MOBILE-SPECIFIC OPTIMIZATIONS
+   ============================================== */
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .touch-button {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .touch-enhanced {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* Android Chrome specific fixes */
+@media (hover: none) and (pointer: coarse) {
+  .touch-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .touch-button:active {
+    transform: translateY(1px) scale(0.98);
+  }
+  
+  .swipeable-container::before,
+  .swipeable-container::after {
+    display: none;
+  }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+
+@media (prefers-color-scheme: dark) {
+  .touch-button-primary {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  }
+  
+  .touch-button-primary:hover:not(.touch-button-disabled) {
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
+  }
+  
+  .touch-button-secondary {
+    background: linear-gradient(135deg, #4f46e530 0%, #7c3aed30 100%);
+    color: #a78bfa;
+    border-color: #a78bfa;
+  }
+  
+  .touch-button-outline {
+    color: #a78bfa;
+    border-color: #a78bfa;
+  }
+  
+  .touch-button-outline:hover:not(.touch-button-disabled) {
+    background: #4f46e5;
+    color: white;
+  }
+  
+  .touch-button-disabled {
+    background: #374151;
+    color: #6b7280;
+    border-color: #4b5563;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .touch-button {
+    background: none !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  
+  .touch-ripple,
+  .swipeable-container::before,
+  .swipeable-container::after {
+    display: none !important;
+  }
+}
+
+/* ==============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================== */
+
+/* Hardware acceleration for smooth animations */
+.touch-button,
+.touch-ripple,
+.swipeable-container {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize for 60fps animations */
+@media (prefers-reduced-motion: no-preference) {
+  .touch-button,
+  .swipeable-container {
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+}
+
+/* Battery saver mode optimizations */
+@media (prefers-reduced-data: reduce) {
+  .touch-button {
+    background: #667eea !important;
+    box-shadow: none !important;
+  }
+  
+  .touch-ripple {
+    display: none;
+  }
+}

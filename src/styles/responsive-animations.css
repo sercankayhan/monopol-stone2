@@ -1,0 +1,637 @@
+/* Responsive Animation Library CSS */
+/* Based on CLAUDE.md Part 1 - Safe animation implementation with performance optimization */
+
+/* ==============================================
+   ANIMATION FOUNDATION
+   ============================================== */
+
+.animated-container {
+  /* Hardware acceleration for smooth animations */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.animated-container.animating {
+  pointer-events: none; /* Prevent interactions during animation */
+}
+
+.animated-container.animation-disabled {
+  transform: none !important;
+  will-change: auto;
+}
+
+/* ==============================================
+   REDUCED MOTION SUPPORT
+   ============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-container,
+  .staggered-container > *,
+  .parallax-container,
+  .loading-animation {
+    animation: none !important;
+    transition: opacity 0.3s ease !important;
+    transform: none !important;
+  }
+  
+  .animated-container.animating {
+    animation: reduced-motion-fade 0.3s ease;
+  }
+  
+  @keyframes reduced-motion-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* ==============================================
+   LOADING ANIMATIONS
+   ============================================== */
+
+.loading-animation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-element {
+  width: 100%;
+  height: 100%;
+}
+
+/* Loading dots animation */
+.loading-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.loading-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: loading-dots-bounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dots .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loading-dots-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==============================================
+   PARALLAX EFFECTS
+   ============================================== */
+
+.parallax-container {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Parallax performance optimization */
+@media (min-width: 768px) {
+  .parallax-container {
+    will-change: transform;
+  }
+}
+
+/* Disable parallax on mobile for performance */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .parallax-container {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* ==============================================
+   STAGGERED ANIMATIONS
+   ============================================== */
+
+.staggered-container {
+  position: relative;
+}
+
+.staggered-container > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.staggered-container > *.animating {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==============================================
+   ANIMATION UTILITIES
+   ============================================== */
+
+/* Animation timing functions */
+.ease-in-out-quad {
+  animation-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+}
+
+.ease-in-out-cubic {
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+}
+
+.ease-in-out-quart {
+  animation-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+}
+
+.ease-in-out-quint {
+  animation-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+}
+
+.ease-in-out-sine {
+  animation-timing-function: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+}
+
+.ease-in-out-expo {
+  animation-timing-function: cubic-bezier(1.000, 0.000, 0.000, 1.000);
+}
+
+.ease-in-out-circ {
+  animation-timing-function: cubic-bezier(0.785, 0.135, 0.150, 0.860);
+}
+
+.ease-in-out-back {
+  animation-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+/* Animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* Animation durations */
+.duration-150 { animation-duration: 150ms; }
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.duration-500 { animation-duration: 500ms; }
+.duration-700 { animation-duration: 700ms; }
+.duration-1000 { animation-duration: 1000ms; }
+
+/* ==============================================
+   HOVER ANIMATIONS
+   ============================================== */
+
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hover-rotate {
+  transition: transform 0.3s ease;
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.hover-bounce {
+  transition: transform 0.3s ease;
+}
+
+.hover-bounce:hover {
+  animation: hover-bounce-animation 0.6s ease;
+}
+
+@keyframes hover-bounce-animation {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Disable hover animations on touch devices */
+@media (hover: none) {
+  .hover-scale:hover,
+  .hover-lift:hover,
+  .hover-rotate:hover,
+  .hover-bounce:hover {
+    transform: none;
+    box-shadow: none;
+    animation: none;
+  }
+}
+
+/* ==============================================
+   SCROLL-TRIGGERED ANIMATIONS
+   ============================================== */
+
+/* Default state for scroll-triggered elements */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll animation variants */
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.animate-fade-in.animate-in {
+  opacity: 1;
+}
+
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-slide-up.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-slide-left.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-slide-right.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-scale-in.animate-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==============================================
+   MOBILE OPTIMIZATIONS
+   ============================================== */
+
+@media (max-width: 767px) {
+  /* Reduce animation complexity on mobile */
+  .animated-container {
+    will-change: opacity;
+  }
+  
+  /* Simplified animations for performance */
+  .animate-on-scroll {
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+  
+  .animate-on-scroll.animate-in {
+    transform: none;
+  }
+  
+  /* Disable parallax and complex transforms */
+  .parallax-container {
+    transform: none !important;
+  }
+  
+  /* Shorter durations for better perceived performance */
+  .duration-300 { animation-duration: 200ms; }
+  .duration-500 { animation-duration: 300ms; }
+  .duration-700 { animation-duration: 400ms; }
+  .duration-1000 { animation-duration: 500ms; }
+}
+
+/* ==============================================
+   HIGH PERFORMANCE MODE
+   ============================================== */
+
+/* For low-end devices or when battery saver is active */
+@media (prefers-reduced-data: reduce) {
+  .animated-container,
+  .parallax-container,
+  .loading-animation {
+    animation: none !important;
+    transform: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  .hover-scale:hover,
+  .hover-lift:hover,
+  .hover-rotate:hover,
+  .hover-bounce:hover {
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+/* Focus indicators for animated elements */
+.animated-container:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .animated-container {
+    transition: border 0.2s ease;
+  }
+  
+  .animated-container:focus-within {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ==============================================
+   DARK MODE SUPPORT
+   ============================================== */
+
+@media (prefers-color-scheme: dark) {
+  .loading-dots .dot {
+    opacity: 0.8;
+  }
+  
+  .animated-container:focus-within {
+    outline-color: #60a5fa;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .animated-container,
+  .parallax-container,
+  .loading-animation,
+  .staggered-container > * {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ==============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================== */
+
+/* Contain layout shifts during animations */
+.animated-container,
+.staggered-container,
+.parallax-container {
+  contain: layout style paint;
+}
+
+/* Optimize for 60fps */
+@supports (contain: layout style paint) {
+  .animated-container {
+    contain: layout style paint;
+  }
+}
+
+/* GPU acceleration for supported properties */
+@supports (will-change: transform) {
+  .animated-container.animating {
+    will-change: transform, opacity;
+  }
+  
+  .animated-container:not(.animating) {
+    will-change: auto;
+  }
+}
+
+/* ==============================================
+   ANIMATION PRESETS AS CSS CLASSES
+   ============================================== */
+
+/* Fade animations */
+.fade-in {
+  animation: fadeIn 0.6s ease both;
+}
+
+.fade-out {
+  animation: fadeOut 0.6s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide animations */
+.slide-in-up {
+  animation: slideInUp 0.6s ease both;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s ease both;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease both;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s ease both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale animations */
+.scale-in {
+  animation: scaleIn 0.6s ease both;
+}
+
+.zoom-in {
+  animation: zoomIn 0.6s ease both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Attention seekers */
+.bounce {
+  animation: bounce 1s ease both;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.shake {
+  animation: shake 0.8s ease both;
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-30px);
+  }
+  70% {
+    transform: translateY(-15px);
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+}
+
+/* Loading animations */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
